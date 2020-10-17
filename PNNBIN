@@ -22,21 +22,25 @@ Rate = []; %record the recognition rate
 %% construct dictionary
 disp(['Recognition Rate (%)']);
 for Downrate=1:length(rateC)
- %            allsamples = []; %store all train images
- %            for i = 1:c
- %                for j=1:ci
- %                    faceT = imread(strcat('.\Cropped Yale\yaleB',num2str(i),'.\',num2str(TrainSet(i,j)),'.pgm'));   %read train image
- %                    faceV = faceT(:); %vector of train image
- %                    faceD = 2*double(faceV)/255-1;
- %                    allsamples = [allsamples faceD]; %all train images
- %                end
- %            end
-    %
- %         W = PCA(allsamples',rateC(Downrate));    %compress matrix
- %            [mappedX, mapping] = compute_mapping(allsamples, 'PCA', rateC(Downrate));
- %            W = mappedX';
- %            A = W*allsamples;      %dictionary after compress
-    load('Wcom200YaleB')
+            allsamples = []; %store all train images
+            for i = 1:c
+                for j=1:ci
+                    faceT = imread(strcat('.\Cropped Yale\yaleB',num2str(i),'.\',num2str(TrainSet(i,j)),'.pgm'));   %read train image
+                    faceV = faceT(:); %vector of train image
+                    faceD = 2*double(faceV)/255-1;
+                    allsamples = [allsamples faceD]; %all train images
+                end
+            end
+    
+         W = PCA(allsamples',rateC(Downrate));    %compress matrix
+            [mappedX, mapping] = compute_mapping(allsamples, 'PCA', rateC(Downrate));
+            W = mappedX';
+            A = W*allsamples;      %dictionary after compress
+%     load('Wcom200YaleB')
+    [m,n] = size(A);
+    for i = 1 : n
+        A(:,i) = A(:,i)/norm(A(:,i)) ;  %normalize the signals to unit L2-norm
+    end
     [m,n] = size(A);
     for i = 1 : n
         A(:,i) = A(:,i)/norm(A(:,i)) ;  %normalize the signals to unit L2-norm
